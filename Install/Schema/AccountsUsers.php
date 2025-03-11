@@ -22,6 +22,13 @@ class AccountsUsers
                     ]
                 ),
                 new Column(
+                    'account_id',
+                    [
+                        'type'          => Column::TYPE_INTEGER,
+                        'notNull'       => true,
+                    ]
+                ),
+                new Column(
                     'first_name',
                     [
                         'type'          => Column::TYPE_VARCHAR,
@@ -36,12 +43,20 @@ class AccountsUsers
                         'size'          => 50,
                         'notNull'       => true,
                     ]
+                ),
+                new Column(
+                    'equity_balance',
+                    [
+                        'type'          => Column::TYPE_FLOAT,
+                        'notNull'       => true,
+                    ]
                 )
             ],
             'indexes' => [
                 new Index(
                     'column_UNIQUE',
                     [
+                        'first_name',
                         'last_name'
                     ],
                     'UNIQUE'
@@ -60,7 +75,7 @@ class AccountsUsers
             new Index(
                 'column_INDEX',
                 [
-                    'first_name'
+                    'account_id'
                 ],
                 'INDEX'
             )
