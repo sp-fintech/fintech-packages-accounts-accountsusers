@@ -13,12 +13,47 @@ class AccountsUsers extends BasePackage
 
     public $accountsusers;
 
-    public function addAccountsUsers($data)
+    public function getAccountsUserById(int $id)
     {
+        $this->ffStore = $this->ff->store($this->ffStoreToUse);
 
+        $this->setFFRelations(true);
+
+        $this->getFirst('id', $id);
+
+        if ($this->model) {
+            $account = $this->model->toArray();
+
+            $account['balances'] = [];
+            if ($this->model->getbalances()) {
+                $account['balances'] = $this->model->getsecurity()->toArray();
+            }
+
+            return $account;
+        } else {
+            if ($this->ffData) {
+                $this->ffData = $this->jsonData($this->ffData, true);
+
+                return $this->ffData;
+            }
+        }
+
+        return null;
     }
 
-    public function updateAccountsUsers($data)
+    public function addAccountsUser($data)
+    {
+        $data['account_id'] = $this->access->auth->account()['id'];
+        $data['equity_balance'] = 0.00;
+
+        if ($this->add($data)) {
+            $this->addResponse('User Added');
+        } else {
+            $this->addResponse('Error Adding User', 1);
+        }
+    }
+
+    public function updateAccountsUser($data)
     {
         $accountsusers = $this->getById((int) $id);
 
@@ -32,7 +67,7 @@ class AccountsUsers extends BasePackage
         $this->addResponse('Error', 1);
     }
 
-    public function removeAccountsUsers($data)
+    public function removeAccountsUser($data)
     {
         $accountsusers = $this->getById((int) $id);
 
