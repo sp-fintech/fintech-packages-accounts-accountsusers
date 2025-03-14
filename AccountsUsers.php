@@ -13,6 +13,37 @@ class AccountsUsers extends BasePackage
 
     public $accountsusers;
 
+    public function getAccountsUserByAccountId(int $account_id)
+    {
+        if ($this->config->databasetype === 'db') {
+            $conditions =
+                [
+                    'conditions'    => 'account_id = :account_id:',
+                    'bind'          =>
+                        [
+                            'account_id'       => (int) $account_id,
+                        ]
+                ];
+        } else {
+            $conditions =
+                [
+                    'conditions'    => ['account_id', '=', (int) $account_id]
+                ];
+        }
+
+        $users = $this->getByParams($conditions);
+
+        if ($users && count($users) > 0) {
+            foreach ($users as &$user) {
+                $user['name'] = $user['first_name'] . ' ' . $user['last_name'];
+            }
+
+            return $users;
+        }
+
+        return [];
+    }
+
     public function getAccountsUserById(int $id)
     {
         $this->ffStore = $this->ff->store($this->ffStoreToUse);
@@ -55,13 +86,16 @@ class AccountsUsers extends BasePackage
 
     public function updateAccountsUser($data)
     {
-        $accountsusers = $this->getById((int) $id);
+        $accountsusers = $this->getById((int) $data['id']);
 
         if ($accountsusers) {
-            //
-            $this->addResponse('Success');
+            $data = array_merge($accountsusers, $data);
 
-            return;
+            if ($this->update($data)) {
+                $this->addResponse('User updated');
+
+                return;
+            }
         }
 
         $this->addResponse('Error', 1);
