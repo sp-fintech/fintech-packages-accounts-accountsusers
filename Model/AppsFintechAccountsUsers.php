@@ -2,7 +2,7 @@
 
 namespace Apps\Fintech\Packages\Accounts\Users\Model;
 
-use Apps\Fintech\Packages\Accounts\Balances\Model\AppsFintechAccountsBalances;
+// use Apps\Fintech\Packages\Accounts\Balances\Model\AppsFintechAccountsBalances;
 use System\Base\BaseModel;
 
 class AppsFintechAccountsUsers extends BaseModel
@@ -21,14 +21,14 @@ class AppsFintechAccountsUsers extends BaseModel
 
     public function initialize()
     {
-        $this->modelRelations['balances']['relationObj'] = $this->hasMany(
-            'id',
-            AppsFintechAccountsBalances::class,
-            'user_id',
-            [
-                'alias'         => 'balances'
-            ]
-        );
+        // $this->modelRelations['balances']['relationObj'] = $this->hasMany(
+        //     'id',
+        //     AppsFintechAccountsBalances::class,
+        //     'user_id',
+        //     [
+        //         'alias'         => 'balances'
+        //     ]
+        // );
 
         parent::initialize();
     }
