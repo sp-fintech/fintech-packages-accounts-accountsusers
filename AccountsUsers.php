@@ -55,10 +55,10 @@ class AccountsUsers extends BasePackage
         if ($this->model) {
             $account = $this->model->toArray();
 
-            $account['balances'] = [];
-            if ($this->model->getbalances()) {
-                $account['balances'] = $this->model->getsecurity()->toArray();
-            }
+            // $account['balances'] = [];
+            // if ($this->model->getbalances()) {
+            //     $account['balances'] = $this->model->getsecurity()->toArray();
+            // }
 
             return $account;
         } else {
@@ -101,17 +101,20 @@ class AccountsUsers extends BasePackage
         $this->addResponse('Error', 1);
     }
 
-    public function removeAccountsUser($data)
+    public function removeAccountsUser($id)
     {
         $accountsusers = $this->getById((int) $id);
 
-        if ($accountsusers) {
-            //
-            $this->addResponse('Success');
+        //Check if user if any portfolio exists for this user.
 
-            return;
-        }
+        // if ($accountsusers) {
+        //     if ($this->remove($accountsusers['id'])) {
+        //         $this->addResponse('User removed');
 
-        $this->addResponse('Error', 1);
+        //         return;
+        //     }
+        // }
+
+        // $this->addResponse('Error removing user', 1);
     }
 }

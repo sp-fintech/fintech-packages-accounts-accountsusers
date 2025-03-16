@@ -43,13 +43,6 @@ class AccountsUsers
                         'size'          => 50,
                         'notNull'       => true,
                     ]
-                ),
-                new Column(
-                    'equity_balance',
-                    [
-                        'type'          => Column::TYPE_FLOAT,
-                        'notNull'       => true,
-                    ]
                 )
             ],
             'indexes' => [
