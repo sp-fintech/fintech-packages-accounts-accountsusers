@@ -44,34 +44,6 @@ class AccountsUsers extends BasePackage
         return [];
     }
 
-    public function getAccountsUserById(int $id)
-    {
-        $this->ffStore = $this->ff->store($this->ffStoreToUse);
-
-        $this->setFFRelations(true);
-
-        $this->getFirst('id', $id);
-
-        if ($this->model) {
-            $account = $this->model->toArray();
-
-            // $account['balances'] = [];
-            // if ($this->model->getbalances()) {
-            //     $account['balances'] = $this->model->getsecurity()->toArray();
-            // }
-
-            return $account;
-        } else {
-            if ($this->ffData) {
-                $this->ffData = $this->jsonData($this->ffData, true);
-
-                return $this->ffData;
-            }
-        }
-
-        return null;
-    }
-
     public function addAccountsUser($data)
     {
         $data['account_id'] = $this->access->auth->account()['id'];
