@@ -31,11 +31,15 @@ class AccountsUsers extends BasePackage
                 ];
         }
 
-        $users = $this->getByParams($conditions);
+        $usersArr = $this->getByParams($conditions);
 
-        if ($users && count($users) > 0) {
-            foreach ($users as &$user) {
+        if ($usersArr && count($usersArr) > 0) {
+            $users = [];
+
+            foreach ($usersArr as $user) {
                 $user['name'] = $user['first_name'] . ' ' . $user['last_name'];
+
+                $users[$user['id']] = $user;
             }
 
             return $users;
