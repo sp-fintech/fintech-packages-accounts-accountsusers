@@ -28,17 +28,30 @@ class AccountsUsers extends BasePackage
             if ($this->model->getbalances()) {
                 $user['balances'] = $this->model->getsecurity()->toArray();
             }
-
-            return $user;
         } else {
             if ($this->ffData) {
-                $this->ffData = $this->jsonData($this->ffData, true);
-
-                return $this->ffData;
+                $user = $this->jsonData($this->ffData, true);
             }
         }
 
-        return null;
+        if (isset($user)) {
+            if (isset($user['balances']) && count($user['balances']) > 0) {
+                $user['balances'] = msort($user['balances'], 'date');
+
+                $userBalance = 0;
+                foreach ($user['balances'] as &$balance) {
+                    if ($balance['type'] === 'debit') {
+                        $balance['balance'] = $userBalance = numberFormatPrecision($userBalance + $balance['amount']);
+                    } else if ($balance['type'] === 'credit') {
+                        $balance['balance'] = $userBalance = numberFormatPrecision($userBalance - $balance['amount']);
+                    }
+                }
+            }
+
+            return $user;
+        }
+
+        return false;
     }
 
     public function getAccountsUserByAccountId(int $account_id)
@@ -109,16 +122,21 @@ class AccountsUsers extends BasePackage
     {
         $accountsusers = $this->getById((int) $id);
 
+        if (!$accountsusers) {
+            $this->addResponse('User account with ID not found.', 1);
+
+            return false;
+        }
+
         //Check if user if any portfolio exists for this user.
 
-        // if ($accountsusers) {
-        //     if ($this->remove($accountsusers['id'])) {
-        //         $this->addResponse('User removed');
+        if ($this->remove($accountsusers['id'])) {
+            //Remove users balances.
+            $this->addResponse('User removed');
 
-        //         return;
-        //     }
-        // }
+            return true;
+        }
 
-        // $this->addResponse('Error removing user', 1);
+        $this->addResponse('Error removing user.', 1);
     }
 }
